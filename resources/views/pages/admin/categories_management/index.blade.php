@@ -73,8 +73,13 @@
                                     <!-- Card body END -->
 
                                     <!-- Card footer -->
-                                    <div class="card-footer border-top text-center p-3">
-                                        <a href="{{ route('admin.articles.index', ['category_id' => $category->id]) }}" class="btn btn-primary-soft w-100 mb-0">مشاهده اخبار</a>
+                                    <div class="card-footer border-top text-center p-3 d-flex gap-2">
+                                        <a href="{{ route('admin.categories.index', ['edit' => $category->id]) }}#category_form_card" class="btn btn-sm btn-outline-warning w-100">
+                                            <i class="bi bi-pencil-square me-1"></i> ویرایش
+                                        </a>
+                                        <a href="{{ route('admin.articles.index', ['category_id' => $category->id]) }}" class="btn btn-sm btn-primary-soft w-100">
+                                            مشاهده اخبار
+                                        </a>
                                     </div>
                                 </div>
                                 <!-- Category item END -->
@@ -97,72 +102,79 @@
 
                 <hr class="my-5">
 
-                <div class="col-12 mt-5">
-                    <!-- Make New Category Form START -->
+                @php
+                    $isEdit = !empty($editingCategory);
+                @endphp
+
+                <div class="col-12 mt-5" id="category_form_card">
                     <div class="border py-3 rounded-3 card">
-                        <div class="px-4">
-                            <h3 id="create_new_category">ایجاد دسته بندی جدید</h3>
+                        <div class="px-4 d-flex justify-content-between align-items-center">
+                            <h3 id="create_new_category">
+                                {{ $isEdit ? 'ویرایش دسته‌بندی: ' . $editingCategory->title : 'ایجاد دسته بندی جدید' }}
+                            </h3>
+                            @if ($isEdit)
+                                <a href="{{ route('admin.categories.index') }}" class="btn btn-sm btn-secondary">
+                                    انصراف از ویرایش
+                                </a>
+                            @endif
                         </div>
                         <hr>
                         <div class="px-4 py-3">
-                            <form class="" action="{{ route('admin.categories.store') }}" method="POST" id="accountForm">
-
+                            <form action="{{ $isEdit ? route('admin.categories.update', $editingCategory) : route('admin.categories.store') }}" method="POST" id="accountForm">
                                 @csrf
+                                @if ($isEdit)
+                                    @method('PUT')
+                                @endif
 
                                 <div class="row mb-3">
                                     <div class="col-12 col-sm-6">
                                         <label class="form-label" for="title">عنوان دسته بندی (فارسی)</label>
-                                        <input class="form-control   mb-1 @error('title') is-invalid @enderror" type="text" name="title" value="{{ old('title') }}">
-                                        <label class="small" style="color:rgb(182, 24, 24);">
-                                            @error('title')
-                                                {{ $message }}
-                                            @enderror
-                                        </label>
+                                        <input class="form-control mb-1 @error('title') is-invalid @enderror" type="text" name="title" id="title" value="{{ old('title', $editingCategory->title ?? '') }}">
+                                        @error('title')
+                                            <label class="small text-danger">{{ $message }}</label>
+                                        @enderror
                                     </div>
+
                                     <div class="col-12 col-sm-6">
                                         <label class="form-label" for="slug">اسلاگ دسته بندی (انگلیسی)</label>
-                                        <input class="form-control mb-1 @error('slug') is-invalid @enderror" type="text" name="slug" value="{{ old('slug') }}">
-                                        @if ($errors->has('slug'))
-                                            <label class="small" style="color:rgb(182, 24, 24);">
-                                                @error('slug')
-                                                    {{ $message }}
-                                                @enderror
-                                            </label>
+                                        <input class="form-control mb-1 @error('slug') is-invalid @enderror" type="text" name="slug" id="slug" value="{{ old('slug', $editingCategory->slug ?? '') }}">
+                                        @error('slug')
+                                            <label class="small text-danger">{{ $message }}</label>
                                         @else
-                                            <small class="text-secondary">اسلاگ ، یک آیدی انگلیسی برای دسته بندی است.</small>
-                                        @endif
-
+                                            <small class="text-secondary">اسلاگ، یک شناسه انگلیسی منحصر‌به‌فرد است.</small>
+                                        @enderror
                                     </div>
 
                                     <div class="col-12 mt-3">
                                         <label class="form-label" for="description">توضیحات</label>
-                                        <textarea class="form-control mb-1 @error('description') is-invalid @enderror" style="min-height: 80px" type="text" name="description" value="{{ old('description') }}"></textarea>
+                                        <textarea class="form-control mb-1 @error('description') is-invalid @enderror" style="min-height: 80px" name="description" id="description">{{ old('description', $editingCategory->description ?? '') }}</textarea>
+                                        @error('description')
+                                            <label class="small text-danger">{{ $message }}</label>
+                                        @else
+                                            <small class="text-secondary">توضیحات باید حداکثر 200 کاراکتر باشد.</small>
+                                        @enderror
                                     </div>
-                                    @if ($errors->has('description'))
-                                        <label class="small" style="color:rgb(182, 24, 24);">
-                                            @error('description')
-                                                {{ $message }}
-                                            @enderror
-                                        </label>
-                                    @else
-                                        <small class="text-secondary">توضیحات باید حداکثر 200 کاراکتر باشد.</small>
-                                    @endif
 
                                     <div class="form-check form-switch form-check-md mt-4 ms-3">
                                         <label class="form-check-label" for="is_show">آیا این دسته بندی نمایش داده شود؟</label>
-                                        <input name="is_show" class="form-check-input" type="checkbox" id="is_show" value="1" {{ old('is_ ', true) ? 'checked' : '' }}>
+                                        <input name="is_show" class="form-check-input" type="checkbox" id="is_show" value="1" {{ old('is_show', $editingCategory->is_show ?? true) ? 'checked' : '' }}>
                                     </div>
                                 </div>
 
-                                <!-- Save button -->
+                                <!-- Action buttons -->
                                 <div class="d-flex justify-content-end mt-4">
-                                    <a href="" id="cancelBtn" class="btn bg-secondary border-0 me-2 disabled" style="pointer-events: none;">لغو</a>
-                                    <input type="submit" class="btn btn-primary" value="ذخیره"></input>
+                                    @if ($isEdit)
+                                        <a href="{{ route('admin.categories.index') }}" class="btn btn-secondary me-2">لغو</a>
+                                    @else
+                                        <a href="" id="cancelBtn" class="btn bg-secondary border-0 me-2 disabled" style="pointer-events: none;">لغو</a>
+                                    @endif
+                                    <button type="submit" class="btn btn-primary">
+                                        {{ $isEdit ? 'ذخیره تغییرات' : 'ذخیره' }}
+                                    </button>
                                 </div>
                             </form>
                         </div>
                     </div>
-                    <!-- Make New Category Form END -->
                 </div>
             </div>
         </div>

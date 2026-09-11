@@ -1,14 +1,1 @@
-/* Plugins CSS */
-@import '../../public/assets/vendor/font-awesome/css/all.min.css';
-@import '../../public/assets/vendor/bootstrap-icons/bootstrap-icons.css';
-@import '../../public/assets/vendor/plyr/plyr.css';
-@import '../../public/assets/vendor/apexcharts/css/apexcharts.css';
-@import '../../public/assets/vendor/quill/css/quill.snow.css';
-@import '../../public/assets/vendor/glightbox/css/glightbox.css';
-@import '../../public/assets/vendor/overlay-scrollbar/css/OverlayScrollbars.min.css';
-@import '../../public/assets/vendor/tiny-slider/tiny-slider.css';
-
-
-
-/* Theme CSS */
-@import '../../public/assets/css/style-rtl.css';
+/* resources/css/app.css */

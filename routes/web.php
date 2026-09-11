@@ -1,5 +1,9 @@
 <?php
 
+Route::get('/test-route', function () {
+    dd('Laravel is working!') ;
+});
+
 use Illuminate\Support\Facades\Route;
 
 // Controllers
