@@ -5,15 +5,9 @@
 
                 <div class="col-12 col-md-3">
                     @if ($article->main_image)
-                        <img
-                             src="{{ $article->main_image }}"
-                             alt="{{ $article->title }}"
-                             class="img-fluid rounded-3 w-100"
-                             style="height: 100px; object-fit: cover;">
+                        <img src="{{ $article->main_image }}" alt="{{ $article->title }}" class="img-fluid rounded-3 w-100" style="height: 100px; object-fit: cover;">
                     @else
-                        <div
-                             class="bg-light rounded-3 d-flex align-items-center justify-content-center"
-                             style="height: 100px;">
+                        <div class="bg-light rounded-3 d-flex align-items-center justify-content-center" style="height: 100px;">
                             <span class="text-muted">
                                 بدون تصویر
                             </span>
@@ -23,9 +17,7 @@
 
                 <div class="col-12 col-md-9">
                     <h5>
-                        <a
-                           href="{{ route('articles.show', $article) }}"
-                           class="btn-link text-reset">
+                        <a href="{{ route('articles.show', $article) }}" class="btn-link text-reset">
                             {{ $article->title }}
                         </a>
                     </h5>

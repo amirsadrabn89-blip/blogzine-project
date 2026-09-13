@@ -29,9 +29,17 @@ class Article extends Model
         'tags'           => 'array',
     ];
 
-    public function getMainImageAttribute(?string $value): ?string
+    public function getMainImageAttribute($value): string
     {
-        return $value? asset('storage/' . $value): null;
+        if (!$value) {
+            return '/assets/images/no-image-available.jpg';
+        }
+
+        if (str_starts_with($value, 'http://') || str_starts_with($value, 'https://')) {
+            return $value;
+        }
+
+        return '/storage/' . ltrim($value, '/');
     }
 
     protected function body(): Attribute

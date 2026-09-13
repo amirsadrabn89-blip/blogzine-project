@@ -14,21 +14,21 @@ use Illuminate\Support\Facades\Storage;
 
 
 class ArticleController extends Controller
-{ 
+{
 
     public function index(Request $request): View
     {
         $isAdmin = auth()->check() && (bool) auth()->user()->is_admin;
-        
+
         $articles = Article::query()
             ->with(['category', 'user'])
             ->withCount([
-                'reactions as likes_count'    => fn ($q) => $q->where('type', 'like'),
-                'reactions as dislikes_count' => fn ($q) => $q->where('type', 'dislike'),
+                'reactions as likes_count'    => fn($q) => $q->where('type', 'like'),
+                'reactions as dislikes_count' => fn($q) => $q->where('type', 'dislike'),
             ])
             ->unless($isAdmin, function ($query) {
                 $query->where('is_show', true)
-                    ->whereHas('category', fn ($q) => $q->where('is_show', true));
+                    ->whereHas('category', fn($q) => $q->where('is_show', true));
             })
             ->when($request->filled('search'), function ($query) use ($request) {
                 $search = trim($request->input('search'));
@@ -60,19 +60,19 @@ class ArticleController extends Controller
         return view('pages.post-grid-masonry-filter', compact('articles', 'categories'));
     }
 
-        public function loadMore(Request $request): JsonResponse
+    public function loadMore(Request $request): JsonResponse
     {
         $isAdmin = auth()->check() && (bool) auth()->user()->is_admin;
-        
+
         $articles = Article::query()
             ->with(['category', 'user'])
             ->withCount([
-                'reactions as likes_count'    => fn ($q) => $q->where('type', 'like'),
-                'reactions as dislikes_count' => fn ($q) => $q->where('type', 'dislike'),
+                'reactions as likes_count'    => fn($q) => $q->where('type', 'like'),
+                'reactions as dislikes_count' => fn($q) => $q->where('type', 'dislike'),
             ])
             ->unless($isAdmin, function ($query) {
                 $query->where('is_show', true)
-                    ->whereHas('category', fn ($q) => $q->where('is_show', true));
+                    ->whereHas('category', fn($q) => $q->where('is_show', true));
             })
             ->when($request->filled('search'), function ($query) use ($request) {
                 $search = trim($request->input('search'));
@@ -106,13 +106,16 @@ class ArticleController extends Controller
 
     public function show(Article $article)
     {
-        if (
-            ! $article->is_show &&
-            ! auth()->user()?->is_admin
-        ) {
+        if (! $article->is_show && ! auth()->user()?->is_admin) {
+
+            $writer_id = $article->user_id;
+
             return redirect()
                 ->route('article_is_draft.page')
-                ->with( 'error', 'این مقاله در حال حاضر برای نمایش در دسترس نیست.' );
+                ->with([
+                    'error' => 'این مقاله در حال حاضر برای نمایش در دسترس نیست.',
+                    'writer_id' => $writer_id,
+                ]);
         }
 
         $sessionKey = 'article_viewed_' . $article->id;
@@ -187,7 +190,7 @@ class ArticleController extends Controller
             ->orderBy('id')
             ->first();
 
-        return view( 'pages.articles.show', compact('article', 'isDraftPreview' , 'topCategories' , 'nextArticle') );
+        return view('pages.articles.show', compact('article', 'isDraftPreview', 'topCategories', 'nextArticle'));
     }
 
     public function create(): View
@@ -289,7 +292,7 @@ class ArticleController extends Controller
             ->orderBy('title')
             ->get();
 
-        return view('pages.dashboard-post-edit', compact( 'article', 'categories' ));
+        return view('pages.dashboard-post-edit', compact('article', 'categories'));
     }
 
     public function update(Request $request, Article $article)
@@ -302,12 +305,12 @@ class ArticleController extends Controller
 
         $validated = $request->validate([
 
-            'title'       => ['required','string','max:255',],
-            'category_id' => ['required','exists:categories,id',],
+            'title'       => ['required', 'string', 'max:255',],
+            'category_id' => ['required', 'exists:categories,id',],
             'tags'        => ['nullable', 'array', 'max:6'],
             'tags.*'      => ['nullable', 'string', 'max:100'],
-            'body'        => ['required','string',],
-        ],[
+            'body'        => ['required', 'string',],
+        ], [
             'title.required'       => '● لطفا این فیلد را تکمیل کنید !',
             'title.min'            => '● عنوان خبر باید حداقل ۳ کاراکتر باشد.',
             'title.max'            => '● عنوان خبر نمی‌تواند بیشتر از ۲۵۵ کاراکتر باشد.',
@@ -337,7 +340,7 @@ class ArticleController extends Controller
     private function normalizeTags(array $tags = []): ?array
     {
         $tags = collect($tags)
-            ->map(fn ($tag) => trim((string) $tag))
+            ->map(fn($tag) => trim((string) $tag))
             ->filter()
             ->unique()
             ->take(6)
@@ -364,7 +367,7 @@ class ArticleController extends Controller
 
         return response()->json([
             'success' => true,
-            'url' => asset('storage/' . $path),
+            'url' => '/storage/' . $path,
             'path' => $path,
         ]);
     }
@@ -386,7 +389,7 @@ class ArticleController extends Controller
             ->route('user.my-articles.page')
             ->with('success', 'خبر با موفقیت حذف شد.');
     }
-    
+
 
     public function myArticles()
     {
@@ -401,13 +404,15 @@ class ArticleController extends Controller
         $pendingArticles = $articles->where('is_show', false)->count();
         $totalViews = $articles->sum('views');
 
-        return view('pages.user.my-articles',
-        compact(
-            'articles',
-            'totalArticles',
-            'publishedArticles',   
-            'pendingArticles',
-            'totalViews'
-        ));
+        return view(
+            'pages.user.my-articles',
+            compact(
+                'articles',
+                'totalArticles',
+                'publishedArticles',
+                'pendingArticles',
+                'totalViews'
+            )
+        );
     }
 }

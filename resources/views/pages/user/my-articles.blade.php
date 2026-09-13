@@ -23,8 +23,8 @@
         <div class="container">
 
             <!-- Stats Cards START -->
-            <div class="p-3 border border-2 rounded-3 shadow-sm overflow-hidden">
-                <div class="row g-3 mb-4">
+            <div class="p-2 p-md-3 border border-2 rounded-3 shadow-sm overflow-hidden">
+                <div class="row g-3 mb-2 mb-md-4">
                     <div class="col-12 col-sm-6 col-lg-3">
                         <div class="card border-0 shadow-sm h-100 bg-dark-subtle">
                             <div class="card-body d-flex align-items-center">
@@ -151,10 +151,7 @@
                                     @foreach ($articles as $article)
                                         <tr>
                                             <td class="text-center">
-                                                <img class="border border-2"
-                                                     src="{{ asset($article->main_image) }}"
-                                                     alt="{{ $article->title }}"
-                                                     style="width: 56px; height: 40px; object-fit: cover; border-radius: 6px;">
+                                                <img class="border border-2" src="{{ asset($article->main_image) }}" alt="{{ $article->title }}" style="width: 56px; height: 40px; object-fit: cover; border-radius: 6px;">
                                             </td>
 
                                             <td>

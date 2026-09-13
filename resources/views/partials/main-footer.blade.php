@@ -74,19 +74,18 @@
                     <!-- Links -->
                     <ul
                         class="nav fw-bold text-center text-sm-end justify-content-center justify-content-center mt-3 mt-md-0">
-                        <li class="nav-item"><a class="nav-link" href="#">آرشیو</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">درباره ما</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">تماس با ما</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('about_us.page') }}">درباره ما</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('contact_us.page') }}">تماس با ما</a></li>
                     </ul>
                 </div>
                 <div class="col-md-4 d-flex align-items-center justify-content-center justify-content-md-end">
-                    <ul class="nav d-flex flex-row-reverse justify-content-center align-items-end ">
+                    {{-- <ul class="nav d-flex flex-row-reverse justify-content-center align-items-end ">
                         <li class="nav-item"><a class="nav-link pt-0" href="#"><i class="fab fa-telegram  fa-fw me-2" style="font-size: 22px;"></i></a></li>
                         <li class="nav-item"><a class="nav-link pt-0" href="#"><i class="fab fa-instagram fa-fw me-2" style="font-size: 22px;"></i></a></li>
                         <li class="nav-item"><a class="nav-link pt-0" href="#"><i class="fab fa-whatsapp  fa-fw me-2" style="font-size: 22px;"></i></a></li>
                         <li class="nav-item"><a class="nav-link pt-0" href="#"><i class="fab fa-linkedin  fa-fw me-2" style="font-size: 22px;"></i></a></li>
                         <li class="nav-item"><a class="nav-link pt-0" href="#"><i class="fab fa-youtube   fa-fw me-2" style="font-size: 22px;"></i></a></li>
-                    </ul>
+                    </ul> --}}
                 </div>
             </div>
         </div>

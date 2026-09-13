@@ -145,7 +145,7 @@
                 <div class="nav-item ms-2 ms-md-3 dropdown">
                     <!-- Avatar -->
                     <div class="btn btn-primary-soft border p-0 d-flex justify-content-between align-items-center rounded-5 ps-3" id="profileDropdown" role="button" data-bs-auto-close="outside" data-bs-display="static" data-bs-toggle="dropdown" aria-expanded="false">
-                        <div class="pt-1"><i class="bi bi-list fs-4"></i></div>
+                        <div class="pt-1"><i class="bi bi-grid-fill fs-4"></i></div>
                         <a class="avatar avatar-sm p-0 ms-2 border rounded-circle" href="#">
                             <img class="avatar-img rounded-circle" src="{{ auth()->user()->avatar_url }}" alt="avatar">
                         </a>

@@ -24,20 +24,18 @@ class  User extends Authenticatable
 
     /**
      * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
      */
 
     public function getAvatarUrlAttribute(): string
     {
         if ($this->avatar) {
-            return \Storage::disk('public')->url($this->avatar);
+            return '/storage/' . ltrim($this->avatar, '/');
         }
 
         return match ($this->gender) {
-            'male'   => asset('assets/images/avatar/user_male.png'),
-            'female' => asset('assets/images/avatar/user_female.png'),
-            default  => asset('assets/images/avatar/user_natural.png'),
+            'male'   => '/assets/images/avatar/user_male.png',
+            'female' => '/assets/images/avatar/user_female.png',
+            default  => '/assets/images/avatar/user_natural.png',
         };
     }
 

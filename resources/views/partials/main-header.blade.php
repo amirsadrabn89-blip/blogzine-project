@@ -5,7 +5,7 @@
     </div>
     <!-- Logo Nav START -->
     <nav class="navbar navbar-expand-lg">
-        <div class="container">
+        <div class="container d-flex justify-content-end align-items-center">
             <!-- Logo START -->
             <a class="navbar-brand" href="{{ route('index.page') }}">
                 <img class="navbar-brand-item light-mode-item" src="{{ asset('assets/images/logo.svg') }}" alt="logo">

@@ -79,7 +79,7 @@
                                         </div>
                                     </li>
                                     <li class="nav-item">{{ verta($article->created_at)->format('%d %B %Y') }}</li>
-                                    <li class="nav-item mb-2">{{ $article->read_time }} دقیقه زمان مطالعه</li>
+                                    <li class="nav-item">{{ $article->read_time }} دقیقه زمان مطالعه</li>
                                 </ul>
                                 <!-- Card category -->
                                 <div class="badge btn btn-outline-info bg-info bg-opacity-25 me-2"><i class="fas fa-circle me-2 small fw-bold"></i>{{ $article->category?->title ?? 'بدون دسته‌بندی' }}</div>
@@ -122,7 +122,7 @@
                                 </button>
                             </form>
 
-                            @auth
+                            @if (auth()->check() && !auth()->user()->is_admin)
                                 @php
                                     $isFav = $article->isFavoritedBy(auth()->user());
                                 @endphp
@@ -134,10 +134,12 @@
                                     <span class="fav-text">{{ $isFav ? 'ذخیره شده' : 'ذخیره' }}</span>
                                 </button>
                             @else
-                                <a href="{{ route('login') }}" class="btn btn-sm btn-outline-secondary" title="برای ذخیره ابتدا وارد شوید">
-                                    <i class="bi bi-bookmark"></i>
-                                </a>
-                            @endauth
+                                @if (!auth()->check())
+                                    <a href="{{ route('login') }}" class="btn btn-outline-secondary rounded-3 me-1" title="برای ذخیره ابتدا وارد شوید">
+                                        <i class="bi bi-bookmark fs-5"></i>
+                                    </a>
+                                @endif
+                            @endif
                         </div>
                     </div>
 
